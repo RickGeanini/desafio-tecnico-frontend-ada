@@ -12,23 +12,9 @@
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
 		"isolatedModules": true,
-		"jsx": "preserve",
-		"baseUrl": "src/",
-		"sourceMap": true,
-		"paths": {
-			"@components/*": ["components/*"],
-			"@containers/*": ["containers/*"],
-			"@contexts/*": ["contexts/*"],
-			"@enums/*": ["enums/*"],
-			"@hocs/*": ["hocs/*"],
-			"@hooks/*": ["hooks/*"],
-			"@interfaces/*": ["interfaces/*"],
-			"@public/*": ["../public/*"],
-			"@services/*": ["services/*"],
-			"@styles/*": ["styles/*"],
-			"@utils/*": ["utils/*"]
-		}
+		"jsx": "preserve"
 	},
-	"include": ["**/*.ts", "**/*.tsx", "**/*.**/*.tsx"],
+	"extends": "./tsconfig.paths.json",
+	"include": ["src", "**/*.ts", "**/*.tsx", "**/*.**/*.tsx"],
 	"exclude": ["node_modules"]
 }
