@@ -27,7 +27,7 @@
 		"@typescript-eslint/no-unused-vars": ["error"],
 		"no-useless-concat": "error",
 		"no-var": "error",
-		"quotes": [2, "single"],
+		// "quotes": [2, "single"],
 		"semi": [2, "always"]
 	}
 }

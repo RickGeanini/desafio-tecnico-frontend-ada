@@ -11,6 +11,7 @@
 			"@interfaces/*": ["interfaces/*"],
 			"@public/*": ["../public/*"],
 			"@services/*": ["services/*"],
+			"@styles/*": ["styles/*"],
 			"@utils/*": ["utils/*"]
 		}
 	}
