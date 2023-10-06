@@ -6,10 +6,9 @@
 		"build": "react-scripts build",
 		"lint": "eslint",
 		"pre-push": "npm run lint && npm run prettier-format",
-		"prepare": "husky install",
 		"prepublishOnly": "npm run build",
 		"prettier-format": "prettier --write \"**/*.{js,jsx,json,md,ts,tsx}\"",
-		"start": "react-scripts start"
+		"start": "react-scripts start .env"
 	},
 	"devDependencies": {
 		"@types/styled-components": "5.1.28",
@@ -22,7 +21,7 @@
 		"eslint-plugin-jsx-a11y": "6.7.1",
 		"eslint-plugin-react": "7.33.2",
 		"eslint-plugin-react-hooks": "4.6.0",
-		"husky": "^8.0.3",
+		"husky": "8.0.3",
 		"lint-staged": "14.0.1",
 		"pretty-quick": "3.1.3"
 	},
