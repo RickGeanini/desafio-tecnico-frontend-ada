@@ -1,12 +1,11 @@
 // ENUMS
-import { EStorageKeys } from '@enums/storage';
+import { IHttpResponse } from '@interfaces/http';
 
 // INTERFACES
 import { ILoginPayload } from '@interfaces/login';
 
 // UTILS
 import { postHandler } from '@utils/httpClient';
-import { saveOnStorage } from '@utils/localStorageHelper';
 
 export default class AuthService {
 	baseUrl: string;
@@ -15,17 +14,7 @@ export default class AuthService {
 		this.baseUrl = `${process.env.REACT_APP_BASE_API}/login`;
 	}
 
-	public async loginHandler(): Promise<void> {
-		const payload = {
-			login: process.env.REACT_APP_AUTH_LOGIN ?? '',
-			senha: process.env.REACT_APP_AUTH_PASSWORD ?? '',
-		} satisfies ILoginPayload;
-
-		try {
-			const jwtToken = await postHandler<ILoginPayload, string>(this.baseUrl, payload);
-			saveOnStorage(EStorageKeys.LOGIN_DATA, jwtToken);
-		} catch (error) {
-			console.error('Login Handler Error', error);
-		}
+	public async loginHandler(payload: ILoginPayload): Promise<IHttpResponse<string>> {
+		return await postHandler<ILoginPayload, string>(this.baseUrl, payload);
 	}
 }

@@ -1,5 +1,8 @@
+// INTERFACES
+import { IErrorMessage, IHttpResponse } from '@interfaces/http';
+
 // UTILS
-import { getBearerAuthorization } from './auth';
+import { getBearerAuthorization } from '@utils/auth';
 
 const defaultFetchParams = {
 	headers: {
@@ -9,7 +12,17 @@ const defaultFetchParams = {
 	},
 };
 
-export const deleteHandler = async <T>(url: string, withAuthorization?: boolean): Promise<T> => {
+const makeHttpResponse = async <T>(response: Promise<Response>) => {
+	const newResponse = (await response) as IHttpResponse<T>;
+	const jsonBody = (await newResponse.json()) as T & IErrorMessage;
+	newResponse.jsonBody = jsonBody;
+	return newResponse;
+};
+
+export const deleteHandler = async <T>(
+	url: string,
+	withAuthorization?: boolean,
+): Promise<IHttpResponse<T>> => {
 	const fetchParams = {
 		...defaultFetchParams,
 		method: 'DELETE',
@@ -19,10 +32,13 @@ export const deleteHandler = async <T>(url: string, withAuthorization?: boolean)
 		fetchParams.headers.Authorization = getBearerAuthorization();
 	}
 
-	return await (await fetch(url, fetchParams)).json();
+	return await makeHttpResponse(fetch(url, fetchParams));
 };
 
-export const getHandler = async <T>(url: string, withAuthorization?: boolean): Promise<T> => {
+export const getHandler = async <T>(
+	url: string,
+	withAuthorization?: boolean,
+): Promise<IHttpResponse<T>> => {
 	const fetchParams = {
 		...defaultFetchParams,
 		method: 'GET',
@@ -32,14 +48,14 @@ export const getHandler = async <T>(url: string, withAuthorization?: boolean): P
 		fetchParams.headers.Authorization = getBearerAuthorization();
 	}
 
-	return await (await fetch(url, fetchParams)).json();
+	return await makeHttpResponse(fetch(url, fetchParams));
 };
 
 export const postHandler = async <P, T>(
 	url: string,
 	payload: P,
 	withAuthorization?: boolean,
-): Promise<T> => {
+): Promise<IHttpResponse<T>> => {
 	const fetchParams = {
 		...defaultFetchParams,
 		method: 'POST',
@@ -50,14 +66,14 @@ export const postHandler = async <P, T>(
 		fetchParams.headers.Authorization = getBearerAuthorization();
 	}
 
-	return await (await fetch(url, fetchParams)).json();
+	return await makeHttpResponse(fetch(url, fetchParams));
 };
 
 export const putHandler = async <P, T>(
 	url: string,
 	payload: P,
 	withAuthorization?: boolean,
-): Promise<T> => {
+): Promise<IHttpResponse<T>> => {
 	const fetchParams = {
 		...defaultFetchParams,
 		method: 'PUT',
@@ -68,5 +84,5 @@ export const putHandler = async <P, T>(
 		fetchParams.headers.Authorization = getBearerAuthorization();
 	}
 
-	return await (await fetch(url, fetchParams)).json();
+	return await makeHttpResponse(fetch(url, fetchParams));
 };
