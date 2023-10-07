@@ -25,6 +25,6 @@ export default class CardsService {
 	}
 
 	public async updateCard(payload: ICard): Promise<IHttpResponse<ICard>> {
-		return await putHandler<ICard, ICard>(`${this.baseUrl}${payload.id}`, payload, true);
+		return await putHandler<ICard, ICard>(`${this.baseUrl}/${payload.id}`, payload, true);
 	}
 }

@@ -11,13 +11,20 @@ import CardsListContainer from '@containers/cards/list/List';
 // HOCS
 import withCardsProvider from '@hocs/with-cards-provider';
 
+// HOOKS
+import { useCardsContextHook } from '@contexts/cards.context';
+
 // DASHBOARD PAGE CONTAINER
 const DashboardPageContainer = () => {
 	/* States */
 	const [isShowCardModal, setIsShowCardModal] = useState<boolean>(false);
 
+	/* Hooks */
+	const { setCardDetails } = useCardsContextHook();
+
 	/* Handlers */
 	const closeCardsModal = () => {
+		setCardDetails(undefined);
 		setIsShowCardModal(false);
 	};
 
@@ -29,7 +36,7 @@ const DashboardPageContainer = () => {
 	return (
 		<LayoutContainerComponent>
 			<HeaderComponent newCardClickHandler={newCardClickHandler} />
-			<CardsListContainer />
+			<CardsListContainer showCardDetails={() => setIsShowCardModal(true)} />
 
 			{isShowCardModal && <CardModalContainer closeModalHandler={closeCardsModal} />}
 		</LayoutContainerComponent>

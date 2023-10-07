@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 // COMPONENTS
 import CardModalComponent from '@components/modals/card/Card';
@@ -43,11 +43,6 @@ const CardModalContainer = ({ closeModalHandler }: ICardModalContainer) => {
 		await saveCard();
 		closeModalHandler();
 	};
-
-	/* Lifecycles */
-	useEffect(() => {
-		setCardDetails(undefined);
-	}, []);
 
 	/* Render */
 	return (

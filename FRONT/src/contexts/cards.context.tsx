@@ -1,11 +1,11 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 import DOMPurify from 'isomorphic-dompurify';
 
 // ENUMS
 import { ECardList } from '@enums/cards';
 
 // HOOKS
-import { useAuthContextHook } from './auth.context';
+import { useAuthContextHook } from '@contexts/auth.context';
 
 // INTERFACES
 import { ICard, ICardsList, ICreateCardPayload } from '@interfaces/cards';
@@ -55,7 +55,7 @@ const CardsProvider = ({ children }: IChildrenProps) => {
 
 			const response = await cardsService.listCards();
 
-			if (response.ok) {
+			if (response.ok && (response.jsonBody ?? [])?.length > 0) {
 				const normalizedCards = normalizeCards(
 					defaultProps,
 					response.jsonBody ?? ([] as ICard[]),
@@ -70,7 +70,7 @@ const CardsProvider = ({ children }: IChildrenProps) => {
 		}
 	};
 
-	const saveCardHandler = useCallback(async () => {
+	const saveCardHandler = async () => {
 		try {
 			await loginHandler();
 
@@ -82,20 +82,24 @@ const CardsProvider = ({ children }: IChildrenProps) => {
 				lista: cardDetails?.lista ?? ECardList.TODO,
 			};
 
-			const response = !cardDetails?.id
-				? await cardsService.createCard(newPayload as ICreateCardPayload)
-				: await cardsService.updateCard(newPayload as ICard);
+			const isEdit: boolean = !!cardDetails?.id;
+
+			const response = isEdit
+				? await cardsService.updateCard(newPayload as ICard)
+				: await cardsService.createCard(newPayload as ICreateCardPayload);
 
 			if (response.ok) {
 				const newCard = response.jsonBody as ICard;
+
 				return setCardList(prevState => {
 					const newCardList = newCard.lista;
 
-					const prevItems = prevState[newCardList] ?? [];
+					const prevCards = prevState[newCardList] ?? [];
+					const newCards = [...prevCards, newCard];
 
 					return {
 						...prevState,
-						[newCardList]: [...prevItems, newCard],
+						[newCardList]: newCards,
 					};
 				});
 			}
@@ -105,7 +109,7 @@ const CardsProvider = ({ children }: IChildrenProps) => {
 		} catch (err) {
 			console.error('Save Card Handler Error', err);
 		}
-	}, [cardDetails]);
+	};
 
 	/* Render */
 	return (
