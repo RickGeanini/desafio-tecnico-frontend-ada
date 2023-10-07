@@ -1,9 +1,10 @@
-import { ReactNode, createContext, useContext, useMemo } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 
 // ENUMS
 import { EStorageKeys } from '@enums/storage';
 
 // INTERFACES
+import { IErrorMessage } from '@interfaces/http';
 import { ILoginPayload } from '@interfaces/login';
 
 // UTILS
@@ -13,9 +14,6 @@ import { saveOnStorage } from '@utils/localStorageHelper';
 import AuthService from '@services/auth';
 
 // AUTH CONTEXT UTILS
-interface IAuthContextProvider {
-	children?: ReactNode;
-}
 
 interface IAuthContextContext {
 	loginHandler: () => Promise<void>;
@@ -25,7 +23,7 @@ interface IAuthContextContext {
 const AuthContext = createContext<IAuthContextContext>({} as IAuthContextContext);
 
 // AUTH CONTEXT PROVIDER
-const AuthContextProvider = ({ children }: IAuthContextProvider) => {
+const AuthContextProvider = ({ children }: IChildrenProps) => {
 	/* SERVICES */
 	const authService: AuthService = useMemo(() => {
 		return new AuthService();
@@ -45,9 +43,10 @@ const AuthContextProvider = ({ children }: IAuthContextProvider) => {
 				return saveOnStorage(EStorageKeys.LOGIN_DATA, token);
 			}
 
-			console.error('Login Handler Error');
-		} catch (error) {
-			console.error('Login Handler Error');
+			const err = response.jsonBody as IErrorMessage;
+			console.error('Login Handler Error', err);
+		} catch (err) {
+			console.error('Login Handler Error', err);
 		}
 	};
 
@@ -64,9 +63,9 @@ const AuthContextProvider = ({ children }: IAuthContextProvider) => {
 };
 
 // USE AUTH CONTEXT HOOK
-const useAuthContextContextHook = () => {
+const useAuthContextHook = () => {
 	const context = useContext(AuthContext);
 	return context;
 };
 
-export { useAuthContextContextHook, AuthContextProvider as default };
+export { useAuthContextHook, AuthContextProvider as default };

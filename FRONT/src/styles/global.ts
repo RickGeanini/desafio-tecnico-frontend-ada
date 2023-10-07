@@ -37,10 +37,10 @@ export const GlobalStyles = createGlobalStyle`
 		padding: 0;
 		margin: 0;
 
-		background: ${({ theme }) => theme.colors.background};
+		background: ${({ theme }) => theme.colors.surface};
         transition: all 0.50s linear;
 
-		color: ${({ theme }) => theme.colors.penguim};
+		color: ${({ theme }) => theme.colors.textSubtlest};
 		font-family: ${({ theme }) => theme.fonts.textFont};
 		font-size: 0.9;
 		letter-spacing: 0.15px;
@@ -48,7 +48,7 @@ export const GlobalStyles = createGlobalStyle`
         text-rendering: optimizeSpeed;
 
 		@media (min-width: 900px) {
-			background: ${({ theme }) => theme.colors.background};
+			background: ${({ theme }) => theme.colors.surface};
 		}
     }
     /* A elements that don't have a class get default styles */

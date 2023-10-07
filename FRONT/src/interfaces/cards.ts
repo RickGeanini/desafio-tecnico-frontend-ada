@@ -12,3 +12,10 @@ export interface ICard extends ICreateCardPayload {
 }
 
 export type ICardsList = Record<ECardList, ICard[]>;
+
+// COMPONENTS
+
+export interface ILaneHeaderComponentList {
+	list: ECardList;
+	counter?: number;
+}
