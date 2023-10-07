@@ -13,3 +13,14 @@ export const StyledModalContainer = styled.div`
 	width: 40vw;
 	padding: 1rem;
 `;
+
+export const StyledModalTitle = styled.h1`
+	padding: 0.5rem;
+`;
+
+export const StyledOptionsWrapper = styled.div`
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 1rem;
+`;

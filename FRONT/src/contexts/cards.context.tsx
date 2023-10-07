@@ -28,7 +28,7 @@ interface ICardsContext {
 	cardDetails?: ICard;
 	cardList: ICardsList;
 	getCarList: () => Promise<void>;
-	saveCard: () => Promise<void>;
+	saveCard: (payload?: ICard) => Promise<void>;
 	setCardDetails: React.Dispatch<React.SetStateAction<ICard | undefined>>;
 }
 
@@ -60,6 +60,7 @@ const CardsProvider = ({ children }: IChildrenProps) => {
 					defaultProps,
 					response.jsonBody ?? ([] as ICard[]),
 				);
+
 				return setCardList(normalizedCards);
 			}
 
@@ -70,17 +71,22 @@ const CardsProvider = ({ children }: IChildrenProps) => {
 		}
 	};
 
-	const saveCardHandler = async () => {
+	const saveCardHandler = async (payload?: ICard) => {
 		try {
 			await loginHandler();
 
-			const cleanedContent = DOMPurify.sanitize(cardDetails?.conteudo ?? '');
+			const newPayload = payload ?? cardDetails;
 
-			const newPayload = {
-				...cardDetails,
-				conteudo: cleanedContent,
-				lista: cardDetails?.lista ?? ECardList.TODO,
-			};
+			if (!newPayload) {
+				return;
+			}
+
+			const cleanedContent = DOMPurify.sanitize(newPayload?.conteudo ?? '');
+			newPayload.conteudo = cleanedContent;
+
+			if (!newPayload.lista) {
+				newPayload.lista = ECardList.TODO;
+			}
 
 			const isEdit: boolean = !!cardDetails?.id;
 
@@ -93,13 +99,37 @@ const CardsProvider = ({ children }: IChildrenProps) => {
 
 				return setCardList(prevState => {
 					const newCardList = newCard.lista;
-
 					const prevCards = prevState[newCardList] ?? [];
-					const newCards = [...prevCards, newCard];
+
+					/* INFO: Verify and Remove to state old "lista" */
+					if (!!cardDetails && cardDetails?.lista !== newCardList) {
+						const restCards = prevState[cardDetails.lista].filter(
+							card => card.id !== cardDetails.id,
+						);
+
+						return {
+							...prevState,
+							[cardDetails.lista]: restCards,
+							[newCardList]: [...prevCards, newCard],
+						};
+					}
+
+					/* INFO: Get Array Index */
+					const cardIndex = prevCards.findIndex(card => card.id === newCard.id);
+
+					if (cardIndex < 0) {
+						return {
+							...prevState,
+							[newCardList]: [...prevCards, newCard],
+						};
+					}
+
+					/* INFO: Update item in array */
+					prevCards[cardIndex] = newCard;
 
 					return {
 						...prevState,
-						[newCardList]: newCards,
+						[newCardList]: prevCards,
 					};
 				});
 			}

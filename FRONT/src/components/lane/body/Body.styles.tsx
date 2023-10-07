@@ -22,11 +22,12 @@ export const StyledLaneGrid = styled.li`
 
 export const StyledLaneCard = styled.div`
 	display: flex;
-	align-items: center;
+	flex-direction: column;
+	gap: 0.5rem;
 
 	cursor: pointer;
 
-	font: normal normal bold 1.5rem ${({ theme }) => theme.fonts.textFont};
+	font: normal normal bold 1.3rem ${({ theme }) => theme.fonts.textFont};
 	letter-spacing: 0.2px;
 	padding: 0.5rem;
 	width: 100%;
@@ -37,6 +38,10 @@ export const StyledLaneCard = styled.div`
 	border: 1px solid ${({ theme }) => theme.colors.surfaceOverlay};
 
 	transition: all 0.2s linear;
+
+	small {
+		font-size: 0.8rem;
+	}
 
 	&:hover {
 		border-color: ${({ theme }) => theme.colors.blueBold};

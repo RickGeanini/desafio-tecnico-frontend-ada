@@ -1,5 +1,7 @@
-// INTERFACES
+// ENUMS
 import { ECardList } from '@enums/cards';
+
+// INTERFACES
 import { ICard, ICardsList } from '@interfaces/cards';
 
 export const normalizeCards = (defaultCards: ICardsList, cards: ICard[]): ICardsList => {
