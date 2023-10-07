@@ -1,8 +1,12 @@
 const theme = {
 	colors: {
+		blueBold: '#579DFF',
+		blueBoldHovered: '#85B8FF',
 		boxShadow: '#00000029',
+		penguim: '#141414',
 		polar: '#ffffff',
 		surface: '#1D2125',
+		surfaceOverlay: '#282E33',
 		surfaceSunken: '#161A1D',
 		textInformation: '#85B8FF',
 		textSubtlest: '#8C9BAB',

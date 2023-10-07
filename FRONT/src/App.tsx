@@ -4,7 +4,7 @@ import React from 'react';
 import AuthContextProvider from '@contexts/auth.context';
 
 // CONTAINERS
-import CardsListContainer from '@containers/cards/list/List';
+import DashboardPageContainer from '@containers/dashboard/Dashboard';
 
 // STYLES
 import { GlobalStyles } from '@styles/global';
@@ -15,7 +15,7 @@ const App = () => {
 	return (
 		<ThemeProvider theme={theme}>
 			<AuthContextProvider>
-				<CardsListContainer />
+				<DashboardPageContainer />
 			</AuthContextProvider>
 
 			{/* Global Styles */}

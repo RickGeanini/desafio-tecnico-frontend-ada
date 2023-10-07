@@ -8,7 +8,7 @@ export interface ICreateCardPayload {
 }
 
 export interface ICard extends ICreateCardPayload {
-	id: string;
+	id?: string;
 }
 
 export type ICardsList = Record<ECardList, ICard[]>;
