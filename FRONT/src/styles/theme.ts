@@ -3,6 +3,7 @@ const theme = {
 		blueBold: '#579DFF',
 		blueBoldHovered: '#85B8FF',
 		boxShadow: '#00000029',
+		danger: '#EF5C48',
 		penguim: '#141414',
 		polar: '#ffffff',
 		surface: '#1D2125',

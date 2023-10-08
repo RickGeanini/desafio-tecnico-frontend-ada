@@ -21,7 +21,7 @@ interface ICardsListContainerProps {
 // CARDS LIST CONTAINER
 const CardsListContainer = ({ showCardDetails }: ICardsListContainerProps) => {
 	/* Hooks */
-	const { cardList, getCarList, setCardDetails } = useCardsContextHook();
+	const { cardList, getCarList, saveCard, setCardDetails } = useCardsContextHook();
 
 	/* Vars */
 	const listHeder = Object.keys(cardList).map(list => {
@@ -41,6 +41,20 @@ const CardsListContainer = ({ showCardDetails }: ICardsListContainerProps) => {
 		showCardDetails();
 	};
 
+	const removeCardHandler = async (cardId: string) => {
+		console.info(cardId);
+	};
+
+	const updateCardLineHandler = async (card: ICard, list: ECardList) => {
+		const newCard = {
+			...card,
+			lista: list,
+			oldList: card.lista,
+		};
+
+		await saveCard(newCard as ICard);
+	};
+
 	/* Lifecycles */
 	useEffect(() => {
 		(async () => {
@@ -52,7 +66,12 @@ const CardsListContainer = ({ showCardDetails }: ICardsListContainerProps) => {
 	return (
 		<>
 			<LaneHeaderComponent cardList={listHeder} />
-			<LaneBodyComponent cardList={cardList} showCardDetails={showCardDetailsHandler} />
+			<LaneBodyComponent
+				cardList={cardList}
+				removeCardHandler={removeCardHandler}
+				showCardDetails={showCardDetailsHandler}
+				updateCardLineHandler={updateCardLineHandler}
+			/>
 		</>
 	);
 };

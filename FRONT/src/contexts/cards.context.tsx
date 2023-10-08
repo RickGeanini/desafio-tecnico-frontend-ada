@@ -88,7 +88,7 @@ const CardsProvider = ({ children }: IChildrenProps) => {
 				newPayload.lista = ECardList.TODO;
 			}
 
-			const isEdit: boolean = !!cardDetails?.id;
+			const isEdit: boolean = !!newPayload?.id;
 
 			const response = isEdit
 				? await cardsService.updateCard(newPayload as ICard)
@@ -102,14 +102,14 @@ const CardsProvider = ({ children }: IChildrenProps) => {
 					const prevCards = prevState[newCardList] ?? [];
 
 					/* INFO: Verify and Remove to state old "lista" */
-					if (!!cardDetails && cardDetails?.lista !== newCardList) {
-						const restCards = prevState[cardDetails.lista].filter(
-							card => card.id !== cardDetails.id,
+					if (newPayload?.oldList && newPayload?.oldList !== newCardList) {
+						const restCards = prevState[newPayload.oldList].filter(
+							card => card.id !== newPayload.id,
 						);
 
 						return {
 							...prevState,
-							[cardDetails.lista]: restCards,
+							[newPayload.oldList]: restCards,
 							[newCardList]: [...prevCards, newCard],
 						};
 					}

@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 // COMPONENTS
 import CardModalComponent from '@components/modals/card/Card';
@@ -18,11 +18,12 @@ interface ICardModalContainer {
 // CARD MODAL CONTAINER
 const CardModalContainer = ({ closeModalHandler }: ICardModalContainer) => {
 	/* States */
+	const [cardEdit, setCardEdit] = useState<ICard | ICreateCardPayload>();
 	const [isEdit, setIEdit] = useState<boolean>(false);
 	const [showPreview, setShowPreview] = useState<boolean>(false);
 
 	/* Hooks */
-	const { cardDetails, saveCard, setCardDetails } = useCardsContextHook();
+	const { cardDetails, saveCard } = useCardsContextHook();
 
 	/* Handlers */
 	const enableEditHandler = () => {
@@ -34,11 +35,11 @@ const CardModalContainer = ({ closeModalHandler }: ICardModalContainer) => {
 		const value = target.value;
 
 		const newCardDetails = {
-			...cardDetails,
+			...cardEdit,
 			[name]: value,
 		};
 
-		setCardDetails(newCardDetails as ICard | ICreateCardPayload);
+		setCardEdit(newCardDetails as ICard | ICreateCardPayload);
 	};
 
 	const previewHandler = () => {
@@ -46,24 +47,30 @@ const CardModalContainer = ({ closeModalHandler }: ICardModalContainer) => {
 	};
 
 	const saveCardHandler = async () => {
-		await saveCard();
+		await saveCard(cardEdit);
 		closeModalHandler();
 	};
 
 	const updateListHandler = async (listType: ECardList) => {
 		const newCardDetails = {
-			...cardDetails,
+			...cardEdit,
 			lista: listType,
+			oldList: cardEdit?.lista,
 		};
 
 		await saveCard(newCardDetails as ICard);
 		closeModalHandler();
 	};
 
+	/* Lifecycles */
+	useEffect(() => {
+		setCardEdit(cardDetails);
+	}, []);
+
 	/* Render */
 	return (
 		<CardModalComponent
-			card={cardDetails}
+			card={isEdit || !cardDetails?.id ? cardEdit : cardDetails}
 			closeModalHandler={closeModalHandler}
 			enableEditHandler={enableEditHandler}
 			isEditCard={isEdit}

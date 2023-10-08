@@ -47,8 +47,8 @@ const CardModalComponent = ({
 	updateListHandler,
 }: ICardModalComponentProps) => {
 	/* Vars */
-	const isDisabledButton = !card?.conteudo || !card.titulo;
 	const disablePreview = !!card?.id && !isEditCard;
+	const isDisabledButton = !card?.conteudo || !card.titulo;
 
 	/* Utils */
 	const renderedModalActions = (
