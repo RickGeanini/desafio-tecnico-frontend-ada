@@ -28,6 +28,7 @@ interface ICardsContext {
 	cardDetails?: ICard;
 	cardList: ICardsList;
 	getCarList: () => Promise<void>;
+	removeCard: (cardId: string) => Promise<void>;
 	saveCard: (payload?: ICard) => Promise<void>;
 	setCardDetails: React.Dispatch<React.SetStateAction<ICard | undefined>>;
 }
@@ -141,6 +142,27 @@ const CardsProvider = ({ children }: IChildrenProps) => {
 		}
 	};
 
+	const removeCardHandler = async (cardId: string) => {
+		try {
+			await loginHandler();
+
+			const response = await cardsService.deleteCard(cardId);
+
+			if (response.ok) {
+				const cards = response.jsonBody ?? ([] as ICard[]);
+
+				const normalizedCards = normalizeCards(defaultProps, cards);
+
+				return setCardList(cards.length > 0 ? normalizedCards : defaultProps);
+			}
+
+			const err = response.jsonBody as IErrorMessage;
+			console.error('Remove Card Handler Error', err);
+		} catch (err) {
+			console.error('Remove Card Handler Error', err);
+		}
+	};
+
 	/* Render */
 	return (
 		<CardsContext.Provider
@@ -148,6 +170,7 @@ const CardsProvider = ({ children }: IChildrenProps) => {
 				cardDetails,
 				cardList,
 				getCarList: getCarListHandler,
+				removeCard: removeCardHandler,
 				saveCard: saveCardHandler,
 				setCardDetails,
 			}}
